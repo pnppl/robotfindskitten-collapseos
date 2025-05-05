@@ -14,7 +14,8 @@ grid_len LINES 3 * / value item_total  \\ <-- tweakable
 1 consts 64 str_size
 1024 str_size / value str_per_blk
 create items.pos item_total cells allot0
-create items.str item_total cells allot0
+\\ create items.str item_total cells allot0
+create items.str item_total str_size * allot0
 create title_str
    ," You are robot (#)." COLS allot0
 create title_str2
@@ -23,12 +24,12 @@ create controls_str
    ," move - wasd/hjkl   quit - q   any - start" COLS allot0
 create win_str 
    ," You found kitten! Way to go, robot!" COLS allot0
-create empty_str COLS allot0
+create empty_str str_size allot0
 \\ drawing to last cell in grid scrolls screen
-: y_to_abs  ( n -- n )  COLS * ;
+: y->abs  ( n -- n )  COLS * ;
 : print!  ( pos c -- )  swap cell! ;
 : hr  ( y -- , horizontal rule ) 
-   y_to_abs  COLS for 
+   y->abs  COLS for 
       dup '-' print! 
    1 + next drop ;
 : vr  ( x -- , vertical rule ) 
@@ -37,8 +38,8 @@ create empty_str COLS allot0
    COLS + next drop ;
 : corners  ( -- , print corners ) 
    '+' 0 cell! '+' x_max cell!
-   '+' y_max-1 y_to_abs cell!
-   '+' y_max-1 y_to_abs x_max + cell! ;
+   '+' y_max-1 y->abs cell!
+   '+' y_max-1 y->abs x_max + cell! ;
 : border  ( -- , print border )
    0 vr x_max vr 
    y_max hr 0 hr 
@@ -78,11 +79,11 @@ create empty_str COLS allot0
       swap 1+ swap 2dup        \\ blk+ chk blk+ chk
    0>= until                   \\ blk+ chk blk+
    to str_end_blk  to str_end_i    drop ;
-: str_num_to_blkpos  ( n -- n n )
+: str_num->blkpos  ( n -- n n )
    1- \\ fixing my idiot zero test in item?
    dup str_per_blk / str_start +
    swap str_per_blk mod ;
-: str[] ( n -- 's )  str_num_to_blkpos str_blk[] ;
+: str[] ( n -- 's )  str_num->blkpos str_blk[] ;
 : str_taken?  ( pos -- f )
    0 item_total for
       2dup items.str =[] if 
@@ -181,5 +182,5 @@ COLS negate value up
    else dup 'l' = if right move
    then then then then
    then then then then drop ;
-: rfk  ( n -- , main. n=last blk where rfk is stored )  
+: rfk  ( main )  
     init begin input again ;
