@@ -1,0 +1,540 @@
+	    KORG  NTS-1 digital kit MIDI Implementation         Version 1.00 (2021.10.04)
+
+1.TRANSMITTED DATA
+
+1-1 CHANNEL MESSAGES            [H]:Hex,  [D]:Decimal
+
++--------+---------+-------------+---------------------------------------------------------+
+| Status | Second  |   Third     |           Description                                   |
+| [Hex]  | [H] [D] | [H]   [D]   |                                                         |
++--------+---------+-------------+---------------------------------------------------------+
+|   8n   | kk (kk) | 40    (64)  | Note Off                                                |
+|   9n   | kk (kk) | vv    (vv)  | Note On  vv=1~127                                       |
+|   Bn   | 0e (14) | vv    (vv)  | EG TYPE (vv=0,25,50,75,127)                    *1-1*2-01|
+|   Bn   | 10 (16) | vv    (vv)  | EG ATTACK (vv=0~127)                                *1-1|
+|   Bn   | 13 (19) | vv    (vv)  | EG RELEASE (vv=0~127)                               *1-1|
+|   Bn   | 14 (20) | vv    (vv)  | TREMOLO DEPTH (vv=0~127)                            *1-1|
+|   Bn   | 15 (21) | vv    (vv)  | TREMOLO RATE (vv=0~127)                             *1-1|
+|   Bn   | 18 (24) | vv    (vv)  | OSCILLATOR LFO RATE (vv=0~127)                      *1-1|
+|   Bn   | 1a (26) | vv    (vv)  | OSCILLATOR LFO DEPTH (vv=0~127)                     *1-1|
+|   Bn   | 1c (28) | vv    (vv)  | MOD FX TIME (vv=0~127)                              *1-1|
+|   Bn   | 1d (29) | vv    (vv)  | MOD FX DEPTH (vv=0~127)                             *1-1|
+|   Bn   | 1e (30) | vv    (vv)  | DELAY FX TIME (vv=0~127)                            *1-1|
+|   Bn   | 1f (31) | vv    (vv)  | DELAY FX DEPTH (vv=0~127)                           *1-1|
+|   Bn   | 21 (33) | vv    (vv)  | DELAY FX MIX (vv=0~127)                             *1-1|
+|   Bn   | 22 (34) | vv    (vv)  | REVERB FX TIME (vv=0~127)                           *1-1|
+|   Bn   | 23 (35) | vv    (vv)  | REVERB FX DEPTH (vv=0~127)                          *1-1|
+|   Bn   | 24 (36) | vv    (vv)  | REVERB FX MIX (vv=0~127)                            *1-1|
+|   Bn   | 2a (42) | vv    (vv)  | FILTER TYPE (vv=0,18,36,54,72,90,127)          *1-1*2-02|
+|   Bn   | 2b (43) | vv    (vv)  | FILTER CUTOFF (vv=0~127)                            *1-1|
+|   Bn   | 2c (44) | vv    (vv)  | FILTER RESONANCE (vv=0~127)                         *1-1|
+|   Bn   | 2d (45) | vv    (vv)  | FILTER SWEEP DEPTH (vv=0~127)                       *1-1|
+|   Bn   | 2e (46) | vv    (vv)  | FILTER SWEEP RATE (vv=0~127)                        *1-1|
+|   Bn   | 35 (53) | vv    (vv)  | OSCILLATOR TYPE (vv=0,25,50,75,127)            *1-1*2-03|
+|   Bn   | 36 (54) | vv    (vv)  | OSCILLATOR SHAPE (vv=0~127)                         *1-1|
+|   Bn   | 37 (55) | vv    (vv)  | OSCILLATOR ALT (vv=0~127)                           *1-1|
+|   Bn   | 58 (88) | vv    (vv)  | MOD FX TYPE (vv=0,25,50,75,127)                *1-1*2-04|
+|   Bn   | 59 (89) | vv    (vv)  | DELAY FX TYPE (vv=0,21,42,63,84,127)           *1-1*2-05|
+|   Bn   | 5a (90) | vv    (vv)  | REVERB FX TYPE (vv=0,21,42,63,84,127)          *1-1*2-06|
+|   Bn   | 75 (117)| vv    (vv)  | ARP PATTERN (vv=0,12,24,36,48,60,72,84,96,127) *1-1*2-07|
+|   Bn   | 76 (118)| vv    (vv)  | ARP INTERVALS (vv=0,21,42,63,84,127)           *1-1*2-08|
+|   Bn   | 77 (119)| vv    (vv)  | ARP LENGTH (vv=0~127)                               *1-1|
++--------+---------+-------------+---------------------------------------------------------+
+
+ *1-1 : This message is transmitted when the "MIDI RX/short message" global parameter is set to "1" (on).
+
+ *2-01 : EG TYPE:ADSR, AHR, AR, AR LOOP, OPEN = vv:0,25,50,75,127
+ *2-02 : FILTER TYPE:LP2, LP4, BP2, BP4, HP2, HP4, OFF = vv:0,18,36,54,72,90,127
+ *2-03 : OSCILLATOR TYPE:SAW, TRI, SQR, VPM, WAVES = vv:0,25,50,75,127
+ *2-04 : MOD FX TYPE:OFF, CHORUS, ENSEMBLE, PHASER, FLANGER = vv:0,25,50,75,127
+ *2-05 : DELAY FX TYPE:OFF, STEREO, MONO, PING PONG, HIGHPASS, TAPE = vv:0,21,42,63,84,127
+ *2-06 : REVERB FX TYPE:OFF, HALL, PLATE, SPACE, RISER, SUBMARINE = vv:0,21,42,63,84,127
+ *2-07 : ARP PATTERN:UP, DOWN, UP-DOWN, DOWN-UP, CONV, DIV, CONV-DIV, DIV-CONV, RAND, STOCH =
+           vv:0,12,24,36,48,60,72,84,96,127
+ *2-08 : ARP INTERVALS:OCT, MAJ, SUS, AUG, MIN, DIM = vv:0,21,42,63,84,127
+
+
+1-2 SYSTEM REALTIME MESSAGES
++-----------+---------------------------------------------+
+| Status[H] | Description                                 |
++-----------+---------------------------------------------+
+|    F8     | Timing Clock                                |
+|    FE     | Active Sensing                              |
++-----------+---------------------------------------------+
+
+1-3 UNIVERSAL SYSTEM EXCLUSIVE MESSAGES
+
+ DEVICE INQUIRY REPLY
++---------+------------------------------------------------+
+| Byte[H] |                Description                     |
++---------+------------------------------------------------+
+|   F0    | Exclusive Status                               |
+|   7E    | Non Realtime Message                           |
+|   0g    | MIDI Global Channel  ( Device ID )             |
+|   06    | General Information                            |
+|   02    | Identity Reply                                 |
+|   42    | KORG ID              ( Manufacturers ID )      |
+|   57    | NTS-1 digital kit ID ( Family ID   (LSB))      |
+|   01    |                      ( Family ID   (MSB))      |
+|   00    |                      ( Member ID   (LSB))      |
+|   00    |                      ( Member ID   (MSB))      |
+|   xx    |                      ( Minor Ver.  (LSB))      |
+|   xx    |                      ( Minor Ver.  (MSB))      |
+|   xx    |                      ( Major Ver.  (LSB))      |
+|   xx    |                      ( Major Ver.  (MSB))      |
+|   F7    | END OF EXCLUSIVE                               |
++---------+------------------------------------------------+
+
+  This message is transmitted whenever a INQUIRY MESSAGE REQUEST is received.
+
+
+1-4 SYSTEM EXCLUSIVE MESSAGES
++-------------+-------------------------------------+------+
+| Function ID |    Description/Function             |      |
+|    [Hex]    |                                     |  *4  |
++-------------+-------------------------------------+------+
+|     47      | USER API VERSION                    | R    |
+|     48      | USER MODULE INFO                    | R    |
+|     49      | USER SLOT STATUS                    | R    |
+|     4A      | USER SLOT DATA                      | R    |
+|             |                                     |      |
+|    23-2F    | STATUS (ACK/NAK)                    | E    |
++-------------+-------------------------------------+------+
+
+ *4 : Transmitted when
+      R  : Request message is received.
+      E  : Exclusive message is received.
+
+
+1-5 SEARCH DEVICE REPLY
++---------+------------------------------------------------+
+| Byte[H] |                Description                     |
++---------+------------------------------------------------+
+|   F0    | Exclusive Status                               |
+|   42    | KORG ID              ( Manufacturers ID )      |
+|   50    | Search Device                                  |
+|   01    | Reply                                          |
+|   0g    | g:MIDI Global Channel  ( Device ID )           |
+|   dd    | Echo Back ID                                   |
+|   57    | NTS-1 digital kit ID ( Family ID   (LSB))      |
+|   01    |                      ( Family ID   (MSB))      |
+|   00    |                      ( Member ID   (LSB))      |
+|   00    |                      ( Member ID   (MSB))      |
+|   xx    |                      ( Minor Ver.  (LSB))      |
+|   xx    |                      ( Minor Ver.  (MSB))      |
+|   xx    |                      ( Major Ver.  (LSB))      |
+|   xx    |                      ( Major Ver.  (MSB))      |
+|   F7    | END OF EXCLUSIVE                               |
++---------+------------------------------------------------+
+
+  g : MIDI Channel = 0 ~ F :Global Channel
+  dd : Echo Back ID = copy from SEARCH DEVICE REQUEST message.
+
+  This message is transmitted whenever a SEARCH DEVICE REQUEST is received.
+  
+
+2.RECOGNIZED RECEIVE DATA
+
+2-1 CHANNEL MESSAGES
++--------+---------+-------------+---------------------------------------------------------+
+| Status | Second  |   Third     |           Description                                   |
+| [Hex]  | [H] [D] | [H]   [D]   |                                                         |
++--------+---------+-------------+---------------------------------------------------------+
+|   8n   | kk (kk) | vv    (vv)  | Note Off vv=1~127                                       |
+|   9n   | kk (kk) | 00    (00)  | Note Off                                                |
+|   9n   | kk (kk) | vv    (vv)  | Note On  vv=1~127                                       |
+|   Bn   | 0e (14) | vv    (vv)  | EG TYPE (vv=0,25,50,75,100)                    *3-1*4-01|
+|   Bn   | 10 (16) | vv    (vv)  | EG ATTACK (vv=0~127)                                *3-1|
+|   Bn   | 13 (19) | vv    (vv)  | EG RELEASE (vv=0~127)                               *3-1|
+|   Bn   | 14 (20) | vv    (vv)  | TREMOLO DEPTH (vv=0~127)                            *3-1|
+|   Bn   | 15 (21) | vv    (vv)  | TREMOLO RATE (vv=0~127)                             *3-1|
+|   Bn   | 18 (24) | vv    (vv)  | OSCILLATOR LFO RATE (vv=0~127)                      *3-1|
+|   Bn   | 1a (26) | vv    (vv)  | OSCILLATOR LFO DEPTH (vv=0~127)                     *3-1|
+|   Bn   | 1c (28) | vv    (vv)  | MOD FX TIME (vv=0~127)                              *3-1|
+|   Bn   | 1d (29) | vv    (vv)  | MOD FX DEPTH (vv=0~127)                             *3-1|
+|   Bn   | 1e (30) | vv    (vv)  | DELAY FX TIME (vv=0~127)                            *3-1|
+|   Bn   | 1f (31) | vv    (vv)  | DELAY FX DEPTH (vv=0~127)                           *3-1|
+|   Bn   | 21 (33) | vv    (vv)  | DELAY FX MIX (vv=0~127)                             *3-1|
+|   Bn   | 22 (34) | vv    (vv)  | REVERB FX TIME (vv=0~127)                           *3-1|
+|   Bn   | 23 (35) | vv    (vv)  | REVERB FX DEPTH (vv=0~127)                          *3-1|
+|   Bn   | 24 (36) | vv    (vv)  | REVERB FX MIX (vv=0~127)                            *3-1|
+|   Bn   | 2a (42) | vv    (vv)  | FILTER TYPE (vv=0,18,36,54,72,90,108)          *3-1*4-02|
+|   Bn   | 2b (43) | vv    (vv)  | FILTER CUTOFF (vv=0~127)                            *3-1|
+|   Bn   | 2c (44) | vv    (vv)  | FILTER RESONANCE (vv=0~127)                         *3-1|
+|   Bn   | 2d (45) | vv    (vv)  | FILTER SWEEP DEPTH (vv=0~127)                       *3-1|
+|   Bn   | 2e (46) | vv    (vv)  | FILTER SWEEP RATE (vv=0~127)                        *3-1|
+|   Bn   | 35 (53) | vv    (vv)  | OSCILLATOR TYPE (vv=0,25,50,75,100)            *3-1*4-03|
+|   Bn   | 36 (54) | vv    (vv)  | OSCILLATOR SHAPE (vv=0~127)                         *3-1|
+|   Bn   | 37 (55) | vv    (vv)  | OSCILLATOR ALT (vv=0~127)                           *3-1|
+|   Bn   | 58 (88) | vv    (vv)  | MOD FX TYPE (vv=0,25,50,75,100)                *3-1*4-04|
+|   Bn   | 59 (89) | vv    (vv)  | DELAY FX TYPE (vv=0,21,42,63,84,105)           *3-1*4-05|
+|   Bn   | 5a (90) | vv    (vv)  | REVERB FX TYPE (vv=0,21,42,63,84,105)          *3-1*4-06|
+|   Bn   | 75 (117)| vv    (vv)  | ARP PATTERN (vv=0,12,24,36,48,60,72,84,96,108) *3-1*4-07|
+|   Bn   | 76 (118)| vv    (vv)  | ARP INTERVALS (vv=0,21,42,63,84,105)           *3-1*4-08|
+|   Bn   | 77 (119)| vv    (vv)  | ARP LENGTH (vv=0~127)                               *3-1|
+|   Bn   | 7b (123)| 00    (00)  | All Note Off                                        *3-1|
+|   En   | bb (bb) | bb    (bb)  | Pitch Bender Change                                 *3-1|
++--------+---------+-------------+---------------------------------------------------------+
+
+ *3-1 : This message is recognized when the "MIDI RX/short message" global parameter is set to "1" (on).
+
+ *4-01 : EG TYPE:ADSR, AHR, AR, AR LOOP, OPEN = vv:0~24,25~49,50~74,75~99,100~127
+ *4-02 : FILTER TYPE:LP2, LP4, BP2, BP4, HP2, HP4, OFF = vv:0~17,18~35,36~53,54~71,72~89,90~107,108~127
+ *4-03 : OSCILLATOR TYPE:SAW, TRI, SQR, VPM, WAVES = vv:0~24,25~49,50~74,75~99,100~127
+ *4-04 : MOD FX TYPE:OFF, CHORUS, ENSEMBLE, PHASER, FLANGER = vv:0~24,25~49,50~74,75~99,100~127
+ *4-05 : DELAY FX TYPE:OFF, STEREO, MONO, PING PONG, HIGHPASS, TAPE = vv:0~20,21~41,42~62,63~83,84~104,105~127
+ *4-06 : REVERB FX TYPE:OFF, HALL, PLATE, SPACE, RISER, SUBMARINE = vv:0~20,21~41,42~62,63~83,84~104,105~127
+ *4-07 : ARP PATTERN:UP, DOWN, UP-DOWN, DOWN-UP, CONV, DIV, CONV-DIV, DIV-CONV, RAND, STOCH =
+           vv:0~11,12~23,24~35,36~47,48~59,60~71,72~83,84~95,96~107,108~127
+ *4-08 : ARP INTERVALS:OCT, MAJ, SUS, AUG, MIN, DIM = vv:0~20,21~41,42~62,63~83,84~104,105~127
+
+2-2 SYSTEM REALTIME MESSAGES
++-----------+---------------------------------------------+
+| Status[H] | Description                                 |
++-----------+---------------------------------------------+
+|    F8     | Timing Clock                             *7 |
+|    FA     | Start                                    *7 |
+|    FB     | Continue                                 *7 |
+|    FC     | Stop                                     *7 |
+|    FE     | Active Sensing                              |
++-----------+---------------------------------------------+
+
+ *7 :This message is recognized when the "Clock" is set to "1" (Auto).
+
+2-3 UNIVERSAL SYSTEM EXCLUSIVE MESSAGE ( NON REALTIME )
+
+ DEVICE INQUIRY MESSAGE REQUEST
++---------+------------------------------------------------+
+| Byte[H] |    Description                                 |
++---------+------------------------------------------------+
+|   F0    | Exclusive Status                               |
+|   7E    | Non Realtime Message                           |
+|   nn    | MIDI Channel (Device ID)                       |
+|   06    | General Information                            |
+|   01    | Identity Request                               |
+|   F7    | END OF EXCLUSIVE                               |
++---------+------------------------------------------------+
+
+ nn : MIDI Channel = 0 ~ F :Global Channel
+                   = 7F    :Any Channel
+
+2-4 SYSTEM EXCLUSIVE MESSAGE
++-------------+--------------------------------------------+
+| Function ID |               Function                     |
+|    [Hex]    |                                            |
++-------------+--------------------------------------------+
+|     17      | USER API VERSION REQUEST                   |
+|     18      | USER MODULE INFO REQUEST                   |
+|     19      | USER SLOT STATUS REQUEST                   |
+|     1A      | USER SLOT DATA REQUEST                     |
+|     1B      | CLEAR USER SLOT                            |
+|     1D      | CLEAR USER MODULE                          |
+|     1E      | SWAP USER DATA                             |
+|             |                                            |
+|     47      | USER API VERSION                           |
+|     48      | USER MODULE INFO                           |
+|     49      | USER SLOT STATUS                           |
+|     4A      | USER SLOT DATA                             |
+|             |                                            |
++-------------+--------------------------------------------+
+
+2-5 SEARCH DEVICE REQUEST
++---------+------------------------------------------------+
+| Byte[H] |                Description                     |
++---------+------------------------------------------------+
+|   F0    | Exclusive Status                               |
+|   42    | KORG ID              ( Manufacturers ID )      |
+|   50    | Search Device                                  |
+|   00    | Request                                        |
+|   dd    | Echo Back ID                                   |
+|   F7    | END OF EXCLUSIVE                               |
++---------+------------------------------------------------
+
+ When this message is received SEARCH DEVICE REPLY message
+ is transmitted with same Echo Back ID.
+
+MIDI EXCLUSIVE FORMAT   (R:Receive, T:Transmit)
+
+(1) USER API VERSION REQUEST                                       R
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0001 0111 (17) | USER API VERSION REQUEST               17H       |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ When this message is received USER API VERSION is transmitted,
+ or STATUS (24) if busy.
+
+
+(2) USER MODULE INFO REQUEST                                       R
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0001 1000 (18) | USER MODULE INFO REQUEST               18H       |
+| 0ddd dddd      | USER MODULE ID (modfx:1,delfx:2,revfx:3,osc:4)   |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ When this message is received, USER MODULE INFO is transmitted,
+ or STATUS (24) if busy.
+
+
+(3) USER SLOT STATUS REQUEST                                       R
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0001 1001 (19) | USER SLOT STATUS REQUEST               19H       |
+| 0ddd dddd      | USER MODULE ID (modfx:1,delfx:2,revfx:3,osc:4)   |
+| 0ddd dddd      | USER SLOT ID   (modfx/osc:0-15, delfx/revfx:0-7) |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ When this message is received USER SLOT STATUS is transmitted,
+ or STATUS (24) if busy.
+
+
+(4) USER SLOT DATA REQUEST                                         R
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0001 1010 (1A) | USER SLOT DATA REQUEST                 1AH       |
+| 0ddd dddd      | USER MODULE ID (modfx:1,delfx:2,revfx:3,osc:4)   |
+| 0ddd dddd      | USER SLOT ID   (modfx/osc:0-15, delfx/revfx:0-7) |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ When this message is received USER SLOT DATA is transmitted,
+ or STATUS (24) if busy.
+
+
+(5) CLEAR USER SLOT                                                R
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0001 1011 (1B) | CLEAR USER SLOT                        1BH       |
+| 0ddd dddd      | USER MODULE ID (modfx:1,delfx:2,revfx:3,osc:4)   |
+| 0ddd dddd      | USER SLOT ID   (modfx/osc:0-15, delfx/revfx:0-7) |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ When this message is received the user API slot specified by USER MODULE ID
+ and USER SLOT ID is cleared, then STATUS is transmitted (see NOTE 2).
+ 
+
+(6) CLEAR USER MODULE                                              R
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0001 1101 (1D) | CLEAR USER MODULE                      1DH       |
+| 0ddd dddd      | USER MODULE ID (modfx:1,delfx:2,revfx:3,osc:4)   |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ When this message is received all user API slots for the specified
+ USER MODULE ID are cleared, then STATUS is transmitted (see NOTE 2).
+ 
+
+(7) SWAP USER DATA                                                 R
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0001 1110 (1E) | SWAP USER DATA                         1EH       |
+| 0ddd dddd      | USER MODULE ID (modfx:1,delfx:2,revfx:3,osc:4)   |
+| 0ddd dddd      | USER SLOT ID   (modfx/osc:0-15, delfx/revfx:0-7) |
+| 0ddd dddd      | USER SLOT ID   (modfx/osc:0-15, delfx/revfx:0-7) |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ When this message is received the data of the specified USER SLOT ID
+ of the specified USER MODULE ID is swapped, then STATUS is
+ transmitted (see NOTE 2).
+ 
+
+(8) USER API VERSION                                               T
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0100 0111 (47) | USER API VERSION                       47H       |
+| 0ddd dddd (dd) | PLATFORM ID               (NTS-1 digital kit: 3) |
+| 0ddd dddd (dd) | MAJOR                           (0-99)           |
+| 0ddd dddd (dd) | MINOR                           (0-99)           |
+| 0ddd dddd (dd) | PATCH                           (0-99)           |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ Transmitted after USER API VERSION REQUEST is received.
+
+
+(9) USER MODULE INFO                                               T
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0100 1000 (48) | USER MODULE INFO                       48H       |
+| 0ddd dddd (dd) | Data1                                            |
+| 0ddd dddd (dd) | Data2                                            |
+| 0ddd dddd (dd) |  :         Data Size         Conv. Size          |
+| 0ddd dddd (dd) |  :       11Bytes (7bit) ->  9Bytes (8bit)        |
+|     :          |  :                                               |
+| 1111 0111 (F7) | EOX                        (see NOTE 1, TABLE 1) |
++----------------+--------------------------------------------------+
+
+ Transmitted after USER MODULE INFO REQUEST is received.
+ 
+
+(10) USER SLOT STATUS                                            R/T
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0100 1001 (49) | USER SLOT STATUS                       49H       |
+| 0ddd dddd (dd) | USER MODULE ID (modfx:1,delfx:2,revfx:3,osc:4)   |
+| 0ddd dddd (dd) | USER SLOT ID   (modfx/osc:0-15, delfx/revfx:0-7) |
+| 0ddd dddd (dd) | Data1                                            |
+| 0ddd dddd (dd) | Data2                                            |
+| 0ddd dddd (dd) |  :         Data Size         Conv. Size          |
+| 0ddd dddd (dd) |  :       37Bytes (7bit) -> 32Bytes (8bit)        |
+|     :          |  :                                               |
+| 1111 0111 (F7) | EOX                        (see NOTE 1, TABLE 2) |
++----------------+--------------------------------------------------+
+
+ When this message is received, the data is saved to the specified
+ module's slot, then STATUS is transmitted (see NOTE 2).
+ 
+ This message is transmitted after USER SLOT STATUS REQUEST is received.
+ 
+
+(11) USER SLOT DATA                                              R/T
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0100 1010 (4A) | USER SLOT DATA                         4AH       |
+| 0ddd dddd (dd) | Data1                                            |
+| 0ddd dddd (dd) | Data2                                            |
+| 0ddd dddd (dd) |  :         Data Size         Conv. Size          |
+| 0ddd dddd (dd) |  :     Variable (7bit) -> Variable (8bit)        |
+|     :          |  :                                               |
+| 1111 0111 (F7) | EOX                        (see NOTE 1, TABLE 3) |
++----------------+--------------------------------------------------+
+
+ When this message is received, the data is saved to the specified
+ module's slot, then then STATUS is transmitted (see NOTE 2).
+ 
+ This message is transmitted after USER SLOT DATA REQUEST is received.
+ 
+
+(12) STATUS (ACK/NAK)                                              T
++----------------+--------------------------------------------------+
+|     Byte       |             Description                          |
++----------------+--------------------------------------------------+
+| F0,42,3g,      | EXCLUSIVE HEADER                                 |
+|    00,01,57    |                                                  |
+| 0010 xxxx (2x) | STATUS (see NOTE 2)                    2xH       |
+| 1111 0111 (F7) | EOX                                              |
++----------------+--------------------------------------------------+
+
+ Transmitted when an error occurs after receiving a system exclusive message.
+
+
+ NOTE 1: 7 bit data format conversion 
+
+   DATA ( 1Set = 8bit x 7Byte )
+   b7     ~      b0   b7     ~      b0   b7   ~~    b0   b7     ~      b0
+   +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-~~-+-+-+  +-+-+-+-+-+-+-+-+
+   | | | | | | | | |  | | | | | | | | |  | | |    | | |  | | | | | | | | |
+   +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-~~-+-+-+  +-+-+-+-+-+-+-+-+
+         7n+0               7n+1          7n+2 ~~ 7n+5         7n+6
+
+    MIDI DATA ( 1Set = 7bit x 8Byte )
+      b7b7b7b7b7b7b7     b6    ~     b0     b6 ~~    b0     b6    ~     b0
+   +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-~~-+-+-+  +-+-+-+-+-+-+-+-+
+   |0| | | | | | | |  |0| | | | | | | |  |0| |    | | |  |0| | | | | | | |
+   +-+-+-+-+-+-+-+-+  +-+-+-+-+-+-+-+-+  +-+-+-~~-+-+-+  +-+-+-+-+-+-+-+-+
+   7n+6,5,4,3,2,1,0         7n+0          7n+1 ~~ 7n+5         7n+6
+
+ NOTE 2: error status
+  
+      STATUS          INTERPRETATION     TYPE
+ ----------------+----------------------+------
+  0010 0011 (23) | OPERATION COMPLETED  |  ACK
+  0010 0100 (24) | OPERATION ERROR      |  NAK
+  0010 0110 (26) | DATA FORMAT ERROR    |  NAK
+  0010 0111 (27) | USER DATA SIZE ERROR |  NAK
+  0010 1000 (28) | USER DATA CRC ERROR  |  NAK
+  0010 1001 (29) | USER TARGET ERROR    |  NAK
+  0010 1010 (2A) | USER API ERROR       |  NAK
+  0010 1011 (2B) | USER LOAD SIZE ERROR |  NAK
+  0010 1100 (2C) | USER MODULE ERROR    |  NAK
+  0010 1101 (2D) | USER SLOT ERROR      |  NAK
+  0010 1110 (2E) | USER FORMAT ERROR    |  NAK
+  0010 1111 (2F) | USER INTERNAL ERROR  |  NAK
+
+TABLE 1 : USER MODULE INFO DATA
++-------+-------+---------+-------------------------------------------+
+| Offset|  Bit  |  Range  |  Description                              |
++-------+-------+---------+-------------------------------------------+
+|  0~3  |       | 0~2^32-1|  MAX PROGRAM STORAGE SIZE (LITTLE ENDIAN) |
++-------+-------+---------+-------------------------------------------+
+|  4~7  |       | 0~2^32-1|  MAX PROGRAM LOAD SIZE (LITTLE ENDIAN)    |
++-------+-------+---------+-------------------------------------------+
+|  8~9  |       |  0~255  |  AVAILABLE SLOT COUNT                     |
++-------+-------+---------+-------------------------------------------+
+
+
+TABLE 2 : USER SLOT STATUS DATA
++-------+-------+---------+-------------------------------------------+
+| Offset|  Bit  |  Range  |  Description                              |
++-------+-------+---------+-------------------------------------------+
+|   0   |       |     1   |  PLATFORM ID                              |
+|   1   |       |   1~5   |  MODULE ID                                |
++-------+-------+---------+-------------------------------------------+
+|   2   |       |   0~99  |  API VERSION MAJOR                        |
+|   3   |       |     0   |  RESERVED                                 |
+|   4   |       |   0~99  |  API VERSION MINOR                        |
+|   5   |       |   0~99  |  API VERSION PATCH                        |
++-------+-------+---------+-------------------------------------------+
+|  6~9  |       | 0~2^32-1|  DEVELOPER ID (LITTLE ENDIAN)             |
++-------+-------+---------+-------------------------------------------+
+| 10~13 |       | 0~2^32-1|  PROGRAM ID (LITTLE ENDIAN)               |
++-------+-------+---------+-------------------------------------------+
+|  14   |       |   0~99  |  PROGRAM VERSION MAJOR                    |
+|  15   |       |      0  |  RESERVED                                 |
+|  16   |       |   0~99  |  PROGRAM VERSION MINOR                    |
+|  17   |       |   0~99  |  PROGRAM VERSION PATCH                    |
++-------+-------+---------+-------------------------------------------+
+| 18-31 |       |  ASCII  |  PROGRAM NAME                             |
++-------+-------+---------+-------------------------------------------+
+
+
+TABLE 3 : USER SLOT DATA
++-------+-------+---------+-------------------------------------------+
+| Offset|  Bit  |  Range  |  Description                              |
++-------+-------+---------+-------------------------------------------+
+|  0~3  |       | 0~2^32-1|  PROGRAM DATA SIZE (LITTLE ENDIAN)        |
++-------+-------+---------+-------------------------------------------+
+|  4~7  |       | 0~2^32-1|  PROGRAM DATA CRC32 (LITTLE ENDIAN)       |
++-------+-------+---------+-------------------------------------------+
+|  8~x  |       |         |  PROGRAM DATA (PAYLOAD SIZE BYTES)        |
++-------+-------+---------+-------------------------------------------+
+

@@ -1,0 +1,132 @@
+# Alp™ 1 Re—e No“s
+
+£ Compir Propƒ‘†
+àà
+c™r: 8b– unsignŒ by default
+‚“gƒ: 16 b–
+l‡g: 32b–
+po‚“r: 16b–
+
+Aì d‹a ˜ ˆŒ big-Šdi„. Reg˜“r v’iabs ’e suğ“d.
+
+àà
+
+£ GŠƒ• St‹us
+
+T fr‡t Šd ˜ l–t modifiŒ from ã65 so shœld be robuˆ. T ‚“gƒ
+„d c™rac“r suğt ™s bån fairly weì “ˆŒ „d €e compir c„ build
+a moˆly func‘‡• Fuzix kƒnel „d u›rspace.
+
+32b– m‹hs ˜ a lot ó “ˆŒ. T b—ics shœld be right „d – ağrs
+ be wk‚g c…ctly f €e Fuzix ‘me ™l‚g code.
+
+T —›mbr ˜ …—‡ably weì “ˆŒ — ˜ €e l‚kƒ. T l‚kƒ ˜
+wr–“n from scr‹ch so may weì ™ÿ a few gl–cs ft  f‚d.
+
+T ã68 coí„d suğts a …—‡ab ›t  €e usu• ã op‘‡s.
+
+£ GŠƒ• Lim–‹i‡s
+
+T 680x proc†ss ™ÿ a s‚g ‚dex …g˜“r. In gŠƒ• €˜ ˜ not a big
+probm „d €e code gŠƒ‹Œ ˜ aãeptab. Func‘‡s €‹ copy d‹a ’œ
+c„ howeÿr gŠƒ‹e qu–e hrib code. T libr’y suğts ™ wr–“n
+impmŠt‹i‡s  key func‘‡s w… €˜ m‹“rs - memcpy f examp.
+
+T compir wks ‚“rn•ly ‡ 16b– v•u†. It ™s some uƒˆ„d‚g 
+by“ opƒ‹i‡s. Provid‚g signŒ c™r ˜ not u›d €e extra code w… –
+u›s 16b– opƒ‹i‡s ™s a m‚im• coˆ (‹ —t ‡ 6803 „d 6303) „d €e
+op‘mizƒ c„ •…ady c„ some  – up. SignŒ c™r ˜ ÿry expŠsiÿ „d
+shœld be avoidŒ if poóib.
+
+T 6303 code gŠƒ‹ wiì u› xgdx. Th˜ mak† 6303 code ‚comp‹ib
+w–h €e 68HC±. U› 6803 if 68HC± comp‹ibil–y ˜ …qui…d.
+
+CuòŠtly „ ’gumŠt c„not be a …g˜“r v’iab. Decl’‚g ‡e …g˜“r
+wiì igne €e h‚t.
+
+As €e compir ™s di…ct page “mp’i† „d …g˜“r v’iabs „y
+…-Štr„t code f ‚“òupts  sign•s wiì nåd  Ÿÿ €†e firˆ.
+
+£ C•l‚g C‡ÿ‰i‡s
+
+ã68 u›s ã65 like c‡ÿ‰i‡s f €e 68° proc†s. ArgumŠts ’e
+ˆackŒ ft  right, v’’gs ’e ™d speci•ly „d €e c•d func‘‡
+pƒfms €e ˆack c„ up.
+
+F €e 6803/6303 proc†ss €e Ÿme b—ic rus ağly but €e c•r
+pƒfms ˆack c„ up ‚ a me c‡ÿ‰i‡• f—hi‡. 68° „d 680x
+compir œtput ’e not comp‹ib.
+
+T ˆack dƒ‚g may c™”e if I f‚d a gïd way  modify €e compir
+ ˆack €e ’gumŠts ‚ cl—sic C ˆy.
+
+Func‘‡ …turns ’e ‚ €e D …g˜“r (ie AB ‡ 68°). A 16b– di…ct
+page …g˜“r c•d s…g ˜ u›d f 32b– m‹hs „d •so  …turn €e
+uğƒ ™lf  a 32b– …sult. Aì …g˜“rs ’e —sumŒ d†troyŒ by €e
+c•d func‘‡ ‚clud‚g di…ct page “mp’i†. Reg˜“r v’iabs ‚
+€e di…ct page ’e Ÿÿd „d …ˆŒ by €e c•d func‘‡ if u›d.
+
+£ UnimpmŠ“d Func‘‡•–y
+
+B–fields ™ÿ not bån “ˆŒ ‹ •l. Ty may wk but if €ey do –'s by
+aãidŠt.
+
+Flo‹‚g po‚t ˜ not suğ“d ‹ •l by €e compir backŠd — w–h ã65.
+T fr‡t Šd suğts flo‹‚g po‚t typ† so €˜ cœld ‚ €ey be aäŒ
+‹ —t f 32b– flo‹. Do‚g so wœld nåd some‡e  impmŠt fpaä,
+fpsub, fpneg, fpmul, fpmod, fpdiv „d maybe a cœp  o€ƒ b—ic opƒ‹i‡s
+bšwån ˆack „d D + dp …g˜“rs.
+
+Yœ c„not ‚›rt sœrce code — coíŠts ‚ €e —›mbly œtput f
+debuç‚g.
+
+T… ˜ no prov˜i‡  di…ctly gŠƒ‹e Fuzix …loc‹ab b‚’i†.
+
+ã68 do† not yš suğt ›nsib diagnoˆics f m„y coí„d l‚e ƒrs
+but juˆ …pts 'uŸge®.'. Th˜ wiì c™”e ‡ce €e ’gumŠts ’e a b–
+me ˆab.
+
+T -l op‘‡ ‡ €e fr‡t Šd do† not yš …solÿ sht nam†  libr’i†
+(eg -lc).
+
+£ Known Incomp“
+
+T 68° code gŠƒ‹ ˜ ˆiì not comp“d „d ‡ly m‚im•ly debuçŒ.
+
+Op‘miz‹i‡ ˜ fairly b—ic ‹ €˜ po‚t.
+
+T Fx suğt code ˜ juˆ a skšch. Moˆ  €e libr’y code ˜ not
+avily “ˆŒ „d some  – ˜ unf‚˜d.
+
+£ Inˆ•l
+
+make; make ‚ˆ•l
+
+It wiì by default place –›lf ‚ /opt/ã68.
+
+No speci• ols shœld be nådŒ.
+
+£ UŸge
+
+ã68 [op‘‡s] [fis]
+
+T fi typ† suğ“d ’e '.c' - which wiì be p…proc†›d „d compid,
+'.S' which wiì be p…proc†›d „d —›mbd, '.s' which wiì be —›mbd,
+„d '.o' f object fis.
+
+Moˆ  €e ˆ„d’d C compir op‘‡s ’e suğ“d. In aä–i‡ €e
+-M o‘‡ gŠƒ‹† a map fi, „d -t name ›ts €e t’gš  €˜ name.
+CuòŠtly €e syˆem suğts fuzix, mc10 „d fx t’gšs.
+
+Wn debuç‚g €e '-X' op‘‡ kåps €e “mp’y fis. T .@ fi ˜ €e
+compir œtput, €e '.s' fi ˜ €e …sults  €e op‘miz‚g p—s.
+
+£ Aä–i‡• C…d–s
+
+T ã68 compir wœld not be poóib w–hœt €e wk  Uìrich v‡
+B—›w–z „d €e m„y o€ƒ c‡triburs  €e ã65 code.
+
+T ã68 —›mbr ˜ dƒiÿd from €e —›mbr by M’k Wiìiams Co.
+…—Œ by Robƒt Sw’tz. P—e ›e —68/COPYRIGHT.MWC.
+
+T op‘mizƒ p—s u›s copt by Chr˜pr W Fr—ƒ.
