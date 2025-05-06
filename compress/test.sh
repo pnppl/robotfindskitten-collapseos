@@ -1,0 +1,1 @@
+for text in inputs/*.txt; ./compress.py -e $text $text.encoded; ./compress.py -d $text.encoded $text.decoded; echo $text; diff $text $text.decoded && math (stat -c %s $text.encoded) / (stat -c %s $text); echo; end

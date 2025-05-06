@@ -1,44 +1,37 @@
 #!/bin/python3
-# experimenting with basic ascii compression
-import sys
 
-trigrams = {
-	0: b'the',
-	1: b'and',
-	2: b'ing',
-	3: b'ent',
-	4: b'ion',
-	5: b'her',
-	6: b'for',
-	7: b'tha',
-	8: b'nth',
-	9: b'int',
-	10: b'ere',
-	11: b'tio',
-	12: b'ter',
-	13: b'est',
-	14: b'ers',
-	15: b'ati',
-	16: b'hat',
-	17: b'ate',
-	18: b'all',
-	19: b'eth',
-	20: b'hes',
-	21: b'ver',
-	22: b'his',
-	23: b'oft',
-	24: b'ith',
-	25: b'fth',
-	26: b'sth',
-	27: b'oth',
-	28: b'res',
-	29: b'ont',
-	30: b'The',
-	31: b'And',
-	127: b'Her'
-}
+# an experiment with simple ascii compression
+# ./compress.py -edt file_in file_out
+# 				encode decode test
+#
+# ascii only uses 7 bits
+# we turn on the top bit to represent another 128 text units of 2 chars each
+# SPC (32) through ~ (126) represent themselves doubled
+# NUL (0)-US (31), DEL (127) are repurposed as the 33 most common bigrams
+#
+# advantages:
+#	very simple to implement
+#	minimal overhead
+#	the encoded file is legible enough to tell what it is, it's just garbled
+#	line breaks are preserved
+#	you can test for negative to see if you can just emit or need to decode first
+#	byte alignment maintained
+#	seems to be pretty consistent with different sorts of texts
+#
+# the main downside is... it only shaves off about 20% (max 50%)
+# it is dubious whether this is worth the increase in annoyance wrt Collapse OS,
+# 	mainly because a consistent line length is tremendously convenient
+#	also you can't decode with a syscall
+#
+# other downsides:
+# 	no CRLF or multiple newline compression
+# 	unicode gets mangled obviously
+# 	you can't play with the rest of the codepage
+# 	lots of the doubled letter units are rare, at least in natural language
+#		you could replace them with 95 more bigrams to improve ratio
+# 	only lowercase bigrams
 
-trigrams_rev = {val: key for key, val in trigrams.items()}
+from sys import argv
 
 bigrams = {
 	0: b'th',
@@ -71,9 +64,9 @@ bigrams = {
 	27: b'se',
 	28: b'ou',
 	29: b'of',
-	30: b'Th',
-	31: b'He',
-	127: b'In'
+	30: b'le',
+	31: b'sa',
+	127: b've'
 }
 
 bigrams_rev = {val: key for key, val in bigrams.items()}
@@ -83,10 +76,6 @@ msb0 = 0b0111_1111
 
 # in: bytearray   out: bytearray with one item
 def encode_byte(chars):
-	"""
-	if chars in trigrams_rev:
-		return (trigrams_rev[chars] | msb1).to_bytes()
-	"""
 	if chars in bigrams_rev:
 		return (bigrams_rev[chars] | msb1).to_bytes()
 	elif len(chars) == 2 and chars[0] == chars[1] and chars[0] > 31 and chars[0] < 127 :
@@ -101,22 +90,6 @@ def encode_file(file_in, file_out):
 		while (byte := file.read(1)):
 			buffer += byte
 			# buffer full
-			"""
-			if len(buffer) == 3:
-				encoded = encode_byte(buffer)
-				# trigram match
-				if encoded != buffer:
-					buffer = b''
-				else:
-					encoded = encode_byte(buffer[0:2])
-					# bigram match
-					if encoded != buffer[0:2]:
-						buffer = buffer[2:]
-					# no match, spit first char
-					else:
-						encoded = buffer[0:1]
-						buffer = buffer[1:]
-			"""
 			if len(buffer) == 2:
 				encoded = encode_byte(buffer)
 				if encoded != buffer:
@@ -138,8 +111,6 @@ def decode_byte(byte):
 		exit(1)
 	byte = byte[0]
 	if byte >= msb1 :
-#		if byte & msb0 in trigrams:
-#			return trigrams[byte & msb0]
 		if byte & msb0 in bigrams:
 			return bigrams[byte & msb0]
 		else:
@@ -155,12 +126,12 @@ def decode_file(file_in, file_out):
 	output.flush()
 	output.close()
 
-match sys.argv[1]:
+match argv[1]:
 	case '-d':
-		decode_file(sys.argv[2], sys.argv[3])
+		decode_file(argv[2], argv[3])
 	case '-e':
-		encode_file(sys.argv[2], sys.argv[3])
+		encode_file(argv[2], argv[3])
 	case '-t':
-		test = encode_byte(sys.argv[2].encode('ascii'))
+		test = encode_byte(argv[2].encode('ascii'))
 		print(test)
 		print(decode_byte(test))
