@@ -13,7 +13,7 @@
 #	very simple to implement
 #	minimal overhead
 #	the encoded file is legible enough to tell what it is, it's just garbled
-#	line breaks are preserved
+#	line breaks and nulls are preserved
 #	you can test for negative to see if you can just emit or need to decode first
 #	byte alignment maintained
 #	seems to be pretty consistent with different sorts of texts
