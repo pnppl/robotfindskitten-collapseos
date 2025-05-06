@@ -1,0 +1,1 @@
+set out results.results; set total 0; set count 0; for text in *.txt; set insize (stat -c %s $text); set outsize (stat -c %s $text.encoded); set count (math $count + 1); set ratio (math $outsize / $insize); set total (math $total + $ratio); echo -e "$text\n$insize\n$outsize\n$ratio\n" >> $out; end; echo -e "\naverage:" >> $out; echo (math $total / $count) >> $out

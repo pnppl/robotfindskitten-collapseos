@@ -1,8 +1,9 @@
 #!/bin/python3
 
 # an experiment with simple ascii compression
-# ./compress.py -edt file_in file_out
-# 				encode decode test
+# ./compress.py -ed file_in file_out
+# ./compres.py -t byte_in
+# encode decode test
 #
 # ascii only uses 7 bits
 # we turn on the top bit to represent another 128 text units of 2 chars each
@@ -16,20 +17,27 @@
 #	line breaks and nulls are preserved
 #	you can test for negative to see if you can just emit or need to decode first
 #	byte alignment maintained
-#	seems to be pretty consistent with different sorts of texts
+#	output will never be larger than input
+#	you can start decoding from any position in the file
+#	seems to be pretty consistent with different sorts of inputs
 #
 # the main downside is... it only shaves off about 20% (max 50%)
 # it is dubious whether this is worth the increase in annoyance wrt Collapse OS,
 # 	mainly because a consistent line length is tremendously convenient
 #	also you can't decode with a syscall
+# it is still a better ratio than you get if you just pack the text into misaligned bytes,
+# 	eg, 8 ascii chars per 7 bytes, which saves at most 12.5%
 #
 # other downsides:
 # 	no CRLF or multiple newline compression
-# 	unicode gets mangled obviously
-# 	you can't play with the rest of the codepage
+# 	unicode etc. gets mangled obviously
 # 	lots of the doubled letter units are rare, at least in natural language
 #		you could replace them with 95 more bigrams to improve ratio
 # 	only lowercase bigrams
+#
+# bigram frequencies from:
+# http://practicalcryptography.com/cryptanalysis/letter-frequencies-various-languages/english-letter-frequencies/
+# lack of 'no' feels suspicious
 
 from sys import argv
 
