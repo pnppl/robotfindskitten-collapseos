@@ -39,13 +39,56 @@ trigrams = {
 }
 
 trigrams_rev = {val: key for key, val in trigrams.items()}
+
+bigrams = {
+	0: b'th',
+	1: b'he',
+	2: b'in',
+	3: b'er',
+	4: b'an',
+	5: b're',
+	6: b'es',
+	7: b'on',
+	8: b'st',
+	9: b'nt',
+	10: b'en',
+	11: b'at',
+	12: b'ed',
+	13: b'nd',
+	14: b'to',
+	15: b'or',
+	16: b'ea',
+	17: b'ti',
+	18: b'ar',
+	19: b'te',
+	20: b'ng',
+	21: b'al',
+	22: b'it',
+	23: b'as',
+	24: b'is',
+	25: b'ha',
+	26: b'et',
+	27: b'se',
+	28: b'ou',
+	29: b'of',
+	30: b'Th',
+	31: b'He',
+	127: b'In'
+}
+
+bigrams_rev = {val: key for key, val in bigrams.items()}
+
 msb1 = 0b1000_0000
 msb0 = 0b0111_1111
 
 # in: bytearray   out: bytearray with one item
 def encode_byte(chars):
+	"""
 	if chars in trigrams_rev:
 		return (trigrams_rev[chars] | msb1).to_bytes()
+	"""
+	if chars in bigrams_rev:
+		return (bigrams_rev[chars] | msb1).to_bytes()
 	elif len(chars) == 2 and chars[0] == chars[1] and chars[0] > 31 and chars[0] < 127 :
 		return (chars[0] | msb1).to_bytes()
 	else:
@@ -58,6 +101,7 @@ def encode_file(file_in, file_out):
 		while (byte := file.read(1)):
 			buffer += byte
 			# buffer full
+			"""
 			if len(buffer) == 3:
 				encoded = encode_byte(buffer)
 				# trigram match
@@ -72,11 +116,20 @@ def encode_file(file_in, file_out):
 					else:
 						encoded = buffer[0:1]
 						buffer = buffer[1:]
+			"""
+			if len(buffer) == 2:
+				encoded = encode_byte(buffer)
+				if encoded != buffer:
+					buffer = b''
+				else:
+					encoded = buffer[0:1]
+					buffer = buffer[1:]
 				output.write(encoded)
 	output.write(buffer)
 	output.flush()
 	output.close()
 	file.close()
+
 
 # in: bytearray with one item   out: bytearray
 def decode_byte(byte):
@@ -85,8 +138,10 @@ def decode_byte(byte):
 		exit(1)
 	byte = byte[0]
 	if byte >= msb1 :
-		if byte & msb0 in trigrams:
-			return trigrams[byte & msb0]
+#		if byte & msb0 in trigrams:
+#			return trigrams[byte & msb0]
+		if byte & msb0 in bigrams:
+			return bigrams[byte & msb0]
 		else:
 			return (byte & msb0).to_bytes() + (byte & msb0).to_bytes()
 	else:
