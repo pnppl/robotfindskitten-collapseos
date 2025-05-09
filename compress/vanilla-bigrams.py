@@ -1,7 +1,7 @@
 #!/bin/python3
 
 file_in="inputs/vanilla.txt"
-file_out="vanilla.txt.bigrams"
+file_out="vanilla.bi"
 bigrams = dict()
 
 buffer = b''

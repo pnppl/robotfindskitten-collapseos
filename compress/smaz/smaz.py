@@ -1,4 +1,5 @@
 #!/bin/python3
+# python wrapper for https://github.com/antirez/smaz
 from sys import argv
 import ctypes
 smaz = ctypes.CDLL("./smaz.so")
@@ -43,7 +44,7 @@ def write_out(cin, file_out):
 	out.close()
 
 match argv[1]:
-	case '-c':
+	case '-c' | '-e':
 		result = smaz_compress(argv[2])
 		write_out(result, argv[3])
 	case '-d':

@@ -1,0 +1,753 @@
+inputs/Gutenberg SF/7jrny10.txt
+443894
+253595
+0.571296
+
+inputs/Gutenberg SF/7lune09.txt
+363905
+230909
+0.634531
+
+inputs/Gutenberg SF/7moon10.txt
+292989
+171166
+0.584206
+
+inputs/Gutenberg SF/7spce10.txt
+414803
+230846
+0.55652
+
+inputs/Gutenberg SF/35.txt
+201870
+114192
+0.565671
+
+inputs/Gutenberg SF/36.txt
+365444
+204427
+0.559394
+
+inputs/Gutenberg SF/72dlg10.txt
+539219
+301127
+0.55845
+
+inputs/Gutenberg SF/159.txt
+267688
+154056
+0.575506
+
+inputs/Gutenberg SF/720k110.txt
+426653
+271288
+0.635852
+
+inputs/Gutenberg SF/720k210.txt
+504204
+320527
+0.635709
+
+inputs/Gutenberg SF/720kc10.txt
+915735
+581646
+0.635168
+
+inputs/Gutenberg SF/1013.txt
+406568
+228300
+0.56153
+
+inputs/Gutenberg SF/6903.txt
+261561
+144520
+0.552529
+
+inputs/Gutenberg SF/7052.txt
+202696
+113436
+0.559636
+
+inputs/Gutenberg SF/10349.txt
+475022
+313782
+0.660563
+
+inputs/Gutenberg SF/11205.txt
+402013
+264680
+0.658387
+
+inputs/Gutenberg SF/11393.txt
+453343
+298816
+0.659139
+
+inputs/Gutenberg SF/12901.txt
+665155
+378918
+0.569669
+
+inputs/Gutenberg SF/13716.txt
+307664
+172721
+0.561395
+
+inputs/Gutenberg SF/13841.txt
+557155
+323300
+0.580269
+
+inputs/Gutenberg SF/14665.txt
+272713
+157728
+0.578366
+
+inputs/Gutenberg SF/16457.txt
+617734
+356678
+0.577397
+
+inputs/Gutenberg SF/16721-8.txt
+140294
+87038
+0.620397
+
+inputs/Gutenberg SF/17026.txt
+77824
+49025
+0.629947
+
+inputs/Gutenberg SF/17027.txt
+86211
+53272
+0.617926
+
+inputs/Gutenberg SF/17028.txt
+327369
+199850
+0.610473
+
+inputs/Gutenberg SF/17029.txt
+84492
+52625
+0.62284
+
+inputs/Gutenberg SF/17030.txt
+86252
+53339
+0.618409
+
+inputs/Gutenberg SF/17138.txt
+96958
+59654
+0.615256
+
+inputs/Gutenberg SF/17355.txt
+114098
+65831
+0.576969
+
+inputs/Gutenberg SF/17866.txt
+412384
+245508
+0.595338
+
+inputs/Gutenberg SF/17870.txt
+286756
+164328
+0.573059
+
+inputs/Gutenberg SF/17958.txt
+206252
+121238
+0.587815
+
+inputs/Gutenberg SF/18105.txt
+70324
+41579
+0.591249
+
+inputs/Gutenberg SF/18109.txt
+66683
+39849
+0.597589
+
+inputs/Gutenberg SF/18137.txt
+364908
+216489
+0.59327
+
+inputs/Gutenberg SF/18139.txt
+318619
+187236
+0.587649
+
+inputs/Gutenberg SF/18151.txt
+239633
+141244
+0.589418
+
+inputs/Gutenberg SF/18172.txt
+237415
+138016
+0.581328
+
+inputs/Gutenberg SF/18257.txt
+492970
+291944
+0.592215
+
+inputs/Gutenberg SF/18261.txt
+38670
+24161
+0.6248
+
+inputs/Gutenberg SF/18342.txt
+47013
+28151
+0.598792
+
+inputs/Gutenberg SF/18346.txt
+229551
+135523
+0.590383
+
+inputs/Gutenberg SF/18361.txt
+370288
+215483
+0.581934
+
+inputs/Gutenberg SF/18431.txt
+334140
+187851
+0.562192
+
+inputs/Gutenberg SF/18458.txt
+375060
+206144
+0.549629
+
+inputs/Gutenberg SF/18460.txt
+70071
+40115
+0.572491
+
+inputs/Gutenberg SF/18492.txt
+315917
+184390
+0.583666
+
+inputs/Gutenberg SF/18520.txt
+290481
+174287
+0.599994
+
+inputs/Gutenberg SF/18584.txt
+115952
+68955
+0.594686
+
+inputs/Gutenberg SF/18602.txt
+393078
+228919
+0.582376
+
+inputs/Gutenberg SF/18632.txt
+46432
+27949
+0.601934
+
+inputs/Gutenberg SF/18641.txt
+89565
+52842
+0.589985
+
+inputs/Gutenberg SF/18719.txt
+342763
+200468
+0.584859
+
+inputs/Gutenberg SF/18753.txt
+324487
+196316
+0.605004
+
+inputs/Gutenberg SF/18768.txt
+229369
+134261
+0.585349
+
+inputs/Gutenberg SF/18786.txt
+297512
+179245
+0.60248
+
+inputs/Gutenberg SF/18800.txt
+165126
+97393
+0.58981
+
+inputs/Gutenberg SF/18807.txt
+66951
+39683
+0.592717
+
+inputs/Gutenberg SF/18814.txt
+72599
+44123
+0.607763
+
+inputs/Gutenberg SF/18817.txt
+357798
+213290
+0.596118
+
+inputs/Gutenberg SF/18831.txt
+60461
+37025
+0.612378
+
+inputs/Gutenberg SF/18846.txt
+158245
+90906
+0.574464
+
+inputs/Gutenberg SF/18855.txt
+84819
+49745
+0.586484
+
+inputs/Gutenberg SF/18857.txt
+517669
+290930
+0.562
+
+inputs/Gutenberg SF/18861.txt
+92909
+54702
+0.58877
+
+inputs/Gutenberg SF/18949.txt
+87199
+52329
+0.60011
+
+inputs/Gutenberg SF/19027.txt
+334603
+198666
+0.593736
+
+inputs/Gutenberg SF/19029.txt
+54068
+31508
+0.582748
+
+inputs/Gutenberg SF/19066.txt
+421753
+251609
+0.596579
+
+inputs/Gutenberg SF/19067.txt
+94405
+55391
+0.586738
+
+inputs/Gutenberg SF/19076.txt
+118669
+69935
+0.589328
+
+inputs/Gutenberg SF/19090.txt
+213714
+121904
+0.570407
+
+inputs/Gutenberg SF/19102.txt
+58300
+35568
+0.610086
+
+inputs/Gutenberg SF/19111.txt
+147584
+86416
+0.585538
+
+inputs/Gutenberg SF/19141.txt
+403236
+218691
+0.54234
+
+inputs/Gutenberg SF/19145.txt
+379688
+212954
+0.560866
+
+inputs/Gutenberg SF/19158.txt
+88544
+51746
+0.58441
+
+inputs/Gutenberg SF/19194.txt
+108189
+62472
+0.577434
+
+inputs/Gutenberg SF/19231.txt
+465587
+265538
+0.570329
+
+inputs/Gutenberg SF/19338.txt
+73000
+42544
+0.582795
+
+inputs/Gutenberg SF/19362.txt
+53710
+32161
+0.59879
+
+inputs/Gutenberg SF/19370.txt
+262333
+157043
+0.59864
+
+inputs/Gutenberg SF/19445.txt
+118295
+69560
+0.588021
+
+inputs/Gutenberg SF/19471.txt
+212943
+127915
+0.600701
+
+inputs/Gutenberg SF/19474.txt
+344352
+205638
+0.597174
+
+inputs/Gutenberg SF/19476.txt
+386895
+219316
+0.566862
+
+inputs/Gutenberg SF/19478.txt
+343654
+202627
+0.589625
+
+inputs/Gutenberg SF/19526.txt
+350413
+211671
+0.604061
+
+inputs/Gutenberg SF/19651.txt
+346051
+195288
+0.564333
+
+inputs/Gutenberg SF/19660.txt
+405766
+233921
+0.576492
+
+inputs/Gutenberg SF/19709.txt
+312863
+190719
+0.609593
+
+inputs/Gutenberg SF/19726.txt
+262900
+156668
+0.595922
+
+inputs/Gutenberg SF/19731.txt
+306674
+177258
+0.578001
+
+inputs/Gutenberg SF/19963-8.txt
+55301
+33550
+0.60668
+
+inputs/Gutenberg SF/19963.txt
+55295
+33541
+0.606583
+
+inputs/Gutenberg SF/19964-8.txt
+43820
+26606
+0.607166
+
+inputs/Gutenberg SF/19964.txt
+43814
+26597
+0.607043
+
+inputs/Gutenberg SF/20121.txt
+199670
+119348
+0.597726
+
+inputs/Gutenberg SF/20132.txt
+186320
+109538
+0.587903
+
+inputs/Gutenberg SF/20147.txt
+327243
+193310
+0.590723
+
+inputs/Gutenberg SF/20154.txt
+398655
+222593
+0.55836
+
+inputs/Gutenberg SF/20212.txt
+275964
+162474
+0.588751
+
+inputs/Gutenberg SF/20442.txt
+77060
+53997
+0.700714
+
+inputs/Gutenberg SF/20519.txt
+473699
+275925
+0.58249
+
+inputs/Gutenberg SF/20551.txt
+206618
+119741
+0.579528
+
+inputs/Gutenberg SF/20553.txt
+67013
+39279
+0.58614
+
+inputs/Gutenberg SF/20649.txt
+123601
+72023
+0.582706
+
+inputs/Gutenberg SF/20659.txt
+120171
+71509
+0.59506
+
+inputs/Gutenberg SF/20707.txt
+456454
+254627
+0.557837
+
+inputs/Gutenberg SF/20726.txt
+151300
+89675
+0.592697
+
+inputs/Gutenberg SF/20727.txt
+400384
+236864
+0.591592
+
+inputs/Gutenberg SF/20728.txt
+414636
+247007
+0.59572
+
+inputs/Gutenberg SF/20739.txt
+291205
+169268
+0.581267
+
+inputs/Gutenberg SF/ajiow10.txt
+551617
+301454
+0.546491
+
+inputs/Gutenberg SF/atcor11.txt
+290531
+161778
+0.556836
+
+inputs/Gutenberg SF/badmd10.txt
+48802
+30764
+0.630384
+
+inputs/Gutenberg SF/bspot10.txt
+613232
+358631
+0.584821
+
+inputs/Gutenberg SF/cmars13.txt
+518061
+289204
+0.558243
+
+inputs/Gutenberg SF/daved10.txt
+236553
+141986
+0.600229
+
+inputs/Gutenberg SF/ecore11.txt
+290062
+161883
+0.558098
+
+inputs/Gutenberg SF/equal10.txt
+927816
+498226
+0.536988
+
+inputs/Gutenberg SF/flat10a.txt
+218565
+125967
+0.576337
+
+inputs/Gutenberg SF/flat11.txt
+207816
+119183
+0.573503
+
+inputs/Gutenberg SF/ftmun10.txt
+289022
+163089
+0.564279
+
+inputs/Gutenberg SF/gmars12.txt
+482571
+268256
+0.555889
+
+inputs/Gutenberg SF/lani10.txt
+361472
+216472
+0.598862
+
+inputs/Gutenberg SF/lcont10.txt
+226089
+125251
+0.55399
+
+inputs/Gutenberg SF/ldqnl10.txt
+285289
+161791
+0.567113
+
+inputs/Gutenberg SF/lkbak10.txt
+458905
+247853
+0.540097
+
+inputs/Gutenberg SF/lostc10.txt
+544480
+300808
+0.552468
+
+inputs/Gutenberg SF/lostw10.txt
+443065
+250117
+0.564515
+
+inputs/Gutenberg SF/memon10.txt
+503251
+290328
+0.576905
+
+inputs/Gutenberg SF/metal10.txt
+157221
+89544
+0.569542
+
+inputs/Gutenberg SF/milnd11.txt
+1150283
+631973
+0.549407
+
+inputs/Gutenberg SF/mmars11.txt
+289604
+163819
+0.565666
+
+inputs/Gutenberg SF/mncpx10.txt
+216027
+122970
+0.569234
+
+inputs/Gutenberg SF/monst10.txt
+339190
+187644
+0.553212
+
+inputs/Gutenberg SF/moon10.txt
+570546
+323578
+0.567137
+
+inputs/Gutenberg SF/ootma11.txt
+219926
+123207
+0.56022
+
+inputs/Gutenberg SF/otorn11.txt
+376464
+210536
+0.559246
+
+inputs/Gutenberg SF/pellu11.txt
+335819
+187775
+0.559155
+
+inputs/Gutenberg SF/pmars13.txt
+401034
+222130
+0.553893
+
+inputs/Gutenberg SF/poftm11.txt
+227380
+127212
+0.559469
+
+inputs/Gutenberg SF/poisn10.txt
+178870
+102026
+0.570392
+
+inputs/Gutenberg SF/spmrs11.txt
+276039
+162694
+0.589388
+
+inputs/Gutenberg SF/thdvl10.txt
+398836
+227102
+0.569412
+
+inputs/Gutenberg SF/tlttf11.txt
+220675
+123760
+0.560825
+
+inputs/Gutenberg SF/trwwl10.txt
+298387
+174259
+0.584003
+
+inputs/Gutenberg SF/wmars13.txt
+333977
+185775
+0.556251
+
+
+average:
+0.585628
