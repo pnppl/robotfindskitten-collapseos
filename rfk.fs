@@ -130,7 +130,6 @@ create #pos free_space ,
 : kitten?  ( pos -- f )  0 items.pos[] @ = ;
 : delay ( n -- , n=delay iterations ) 
    for $7FFF for random drop next next ;
-: reunion ( -- ) 0 items.str[] sayln 2 delay init ;
 : center  ( -- n , middle of screen ) 
    LINES 2 /    COLS * 
    COLS 2 / +    COLS - 1 - ;
@@ -165,12 +164,13 @@ create #pos free_space ,
 \\ fix this, can't call more than once
 : init  ( -- ) 
    title clear border random_init mem_init item_init #draw ;
+: reunion ( -- ) 0 items.str[] sayln 2 delay init ;
 : move  ( n -- , offset #pos by n and update screen )
    #offset dup wall? if
          drop else
          dup kitten? if
          drop reunion else
-         dup item?@ dup if
+         dup item?@ dup 0>= if
          sayln drop else 
          drop say_nothing #update_empty!
   then then then ;
