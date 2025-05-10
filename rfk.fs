@@ -14,7 +14,7 @@ grid_len LINES 3 * / value item_total  \\ <-- tweakable
 1 consts 64 str_size
 1024 str_size / value str_per_blk
 create items.pos item_total cells allot0
-\\ create items.str item_total cells allot0
+create items.taken item_total cells allot0
 create items.str item_total str_size * allot0
 create title_str
    ," You are robot (#)." COLS allot0
@@ -59,13 +59,19 @@ create empty_str str_size allot0
 : []  ( n a -- 'a[n] )  swap cells + ;
 : =[]  ( val n a -- f , f=1 if a[n]=val ) 
    [] @ = if 1 else 0 then ;
-: str_blk[]  ( n n -- a , blk# i -- 'blk[i] )  
+: items.pos[]  items.pos [] ;
+: items.str[]  ( n -- 'items.str[n] )  
+   str_size * items.str + ;
+: blk[]  ( n n -- a , blk# i -- 'blk[i] )  
    swap blk@ blk( swap str_size * + ;
-: str_blk@  ( blk# i -- blk[i] ) str_blk[] @ ;
-: str_blk@c  ( n n -- c , low byte )  str_blk[] @ l|m drop ;
+: blk@c  ( n n -- c , low byte )  blk[] @ l|m drop ;
+: str_num->blkpos  ( n -- n n )
+   dup str_per_blk / str_start +
+   swap str_per_blk mod ;
+: str_blk[] ( n -- 's )  str_num->blkpos blk[] ;
 : str_check_blk  ( n -- n? , blk# -- last good offset or -1 )
    0 2dup 16 for       \\ blk i blk i
-      tuck str_blk@c   \\ blk i i blk[i]
+      tuck blk@c   \\ blk i i blk[i]
       SPC = if         \\ blk i i
       nip nip r~ exit  \\ i
       then
@@ -79,23 +85,12 @@ create empty_str str_size allot0
       swap 1+ swap 2dup        \\ blk+ chk blk+ chk
    0>= until                   \\ blk+ chk blk+
    to str_end_blk  to str_end_i    drop ;
-: str_num->blkpos  ( n -- n n )
-   1- \\ fixing my idiot zero test in item?
-   dup str_per_blk / str_start +
-   swap str_per_blk mod ;
-: str[] ( n -- 's )  str_num->blkpos str_blk[] ;
-: str_taken?  ( pos -- f )
+: str_taken?  ( str# -- f )
    0 item_total for
-      2dup items.str =[] if 
-         drop 1 r~ exit 
-      then 1+ 
+      2dup items.taken =[] if 
+         2drop 1 r~ exit 
+      then 1+
    next 2drop 0 ;
-: pick_str  ( -- n , selected string number )  
-   begin
-      0 str_total rand  dup str_taken?
-      not if 1+ \\ fixing idiot 0test in item?
-   exit then drop
-   again ;
 : wall?  ( n -- f , f=1 if wall ) 
    dup COLS < if 1  \\ y=0
    else dup COLS y_max-1 * 1- > if 1  \\ y too big
@@ -103,21 +98,20 @@ create empty_str str_size allot0
    else dup COLS mod x_max = if 1  \\ x too big
    else 0
    then then then then nip ;
-\\ fix this
-: item?  ( pos -- a? , address of item's string or 0 )
+: item?@  ( pos -- a? , address of item's string or -1 )
    0 item_total for
       2dup items.pos =[] if 
-         nip items.str [] @ r~ exit 
+         nip items.str[] r~ exit 
       then 1+ 
-   next 2drop 0 ;
+   next 2drop -1 ;
 : safe?  ( pos -- f , f=1 if no collision )  
-   dup wall? swap item? or if 0 else 1 then ;
-: get_pos  ( -- n ) 
+   dup wall? swap item?@ 0>= or if 0 else 1 then ;
+: free_space  ( -- n , get empty pos ) 
    begin 
       0 grid_len rand 
       dup safe? if exit then 
    drop again ;
-create #pos get_pos ,
+create #pos free_space ,
 : #offset  ( n -- n , #pos + offset )  #pos @ + ;  
 : #pos!  ( n -- , set # with absolute value )  #pos ! ;
 : #erase  ( -- , we are the space robots )  SPC #pos @ cell! ;
@@ -128,24 +122,38 @@ create #pos get_pos ,
 : item_char  ( -- c , get random ascii char )  
    33 126 rand dup '#' = if drop '~' ( ascii 126 ) then ;
 : item_place  ( -- pos , print and return pos )
-   item_char get_pos tuck cell! ;
+   item_char free_space tuck cell! ;
 : sayln ( a -- )
    bottom-left str_size cells!  1 to text_state  #cursor ;
 : say_nothing  ( -- , erase text )  
    text_state if empty_str sayln then 0 to text_state ;
-: kitten?  ( a -- f )  0 items.str [] @ = ;
+: kitten?  ( pos -- f )  0 items.pos[] @ = ;
 : delay ( n -- , n=delay iterations ) 
    for $7FFF for random drop next next ;
-: reunion ( -- ) ;
+: reunion ( -- ) 0 items.str[] sayln 2 delay init ;
 : center  ( -- n , middle of screen ) 
    LINES 2 /    COLS * 
    COLS 2 / +    COLS - 1 - ;
+: copy_bytes  ( a2 a1 u -- , copy u bytes from a1 to a2 )
+   for c@+ rot c!+ swap next 2drop ;
+: copy_str  ( a2 a1 -- , copy str from a1 to a2 )
+   str_size copy_bytes ;
+: kitten_init  ( generate kitten ) 
+   item_place 0 items.pos[] !
+   0 items.str[] win_str copy_str ;
+: find_str  ( -- a , selected string )  
+   begin
+      0 str_total rand  dup str_taken?
+      not if str_blk[] exit
+      then drop
+   again ;
+: pick_str! ( i -- , get str and store in items.str[i] )
+      items.str[] find_str copy_str ;
 : item_init  ( -- , generate all items )
-   item_place 0 items.pos [] !
-   win_str 0 items.str [] !
-   1 item_total 1- for 
-      dup item_place swap items.pos [] ! 
-      dup pick_str swap items.str [] ! 
+   kitten_init
+   1 item_total 1- for
+      dup item_place swap items.pos[] !
+      dup pick_str!
    1+ next drop ;
 : title ( -- , show title screen ) 
    clear 510 xypos! title_str emitln 
@@ -157,17 +165,15 @@ create #pos get_pos ,
 \\ fix this, can't call more than once
 : init  ( -- ) 
    title clear border random_init mem_init item_init #draw ;
-: handle_item ( a -- ) 
-   dup kitten? dup if reunion 
-   else swap @ str[] swap then 
-   swap sayln if 2 delay init then ;
 : move  ( n -- , offset #pos by n and update screen )
    #offset dup wall? if
          drop else
-         dup item? dup if 
-         handle_item drop else
-         say_nothing swap #update_empty! drop
-  then then ;
+         dup kitten? if
+         drop reunion else
+         dup item?@ dup if
+         sayln drop else 
+         drop say_nothing #update_empty!
+  then then then ;
 3 consts COLS down -1 left 1 right
 COLS negate value up
 : input  ( -- ) 
