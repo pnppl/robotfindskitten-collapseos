@@ -60,6 +60,7 @@ create empty_str str_size allot0
 : =[]  ( val n a -- f , f=1 if a[n]=val ) 
    [] @ = if 1 else 0 then ;
 : items.pos[]  items.pos [] ;
+: items.taken[]  items.taken [] ;
 : items.str[]  ( n -- 'items.str[n] )  
    str_size * items.str + ;
 : blk[]  ( n n -- a , blk# i -- 'blk[i] )  
@@ -98,20 +99,20 @@ create empty_str str_size allot0
    else dup COLS mod x_max = if 1  \\ x too big
    else 0
    then then then then nip ;
-: item?@  ( pos -- a? , address of item's string or -1 )
+: item@?  ( pos -- a? , address of item's string or -1 )
    0 item_total for
       2dup items.pos =[] if 
          nip items.str[] r~ exit 
       then 1+ 
    next 2drop -1 ;
 : safe?  ( pos -- f , f=1 if no collision )  
-   dup wall? swap item?@ 0>= or if 0 else 1 then ;
+   dup wall? swap item@? 0>= or if 0 else 1 then ;
 : free_space  ( -- n , get empty pos ) 
    begin 
       0 grid_len rand 
       dup safe? if exit then 
    drop again ;
-create #pos free_space ,
+free_space value #pos
 : #offset  ( n -- n , #pos + offset )  #pos @ + ;  
 : #pos!  ( n -- , set # with absolute value )  #pos ! ;
 : #erase  ( -- , we are the space robots )  SPC #pos @ cell! ;
@@ -159,18 +160,28 @@ create #pos free_space ,
    745 xypos! title_str2 emitln
    980 xypos! controls_str emitln
    525 xypos!   key drop ;
+0 value init_done
+: empty_str!  ( a -- , replace string at a with 0s )
+   str_size for 0 swap c!+ next drop ;
+: de_init  ( -- , clear out arrays for repeat init )
+   0 item_total for
+      dup 0 swap items.pos[] !
+      dup 0 swap items.taken[] !
+      dup items.str[] empty_str!
+   1+ next drop ;
 : mem_init  ( -- , init strings stored in blocks after rfk )  
-   blk> 1+ to str_start  str_enum ;
-\\ fix this, can't call more than once
+   init_done not if  blk> 1+ to str_start  str_enum  then ;
 : init  ( -- ) 
-   title clear border random_init mem_init item_init #draw ;
+   title clear border random_init 
+   init_done if de_init then mem_init item_init #draw
+   1 to init_done ;
 : reunion ( -- ) 0 items.str[] sayln 2 delay init ;
 : move  ( n -- , offset #pos by n and update screen )
    #offset dup wall? if
          drop else
          dup kitten? if
          drop reunion else
-         dup item?@ dup 0>= if
+         dup item@? dup 0>= if
          sayln drop else 
          drop say_nothing #update_empty!
   then then then ;
