@@ -10,8 +10,8 @@ COLS y_max-1 * value grid_len
 grid_len LINES 3 * / value item_total  \\ <-- tweakable 
 42069 value seed0                       \\ <-- values
 666 value seed1                          \\ <-- here
+2 consts 2 delay_count 64 str_size        \\
 5 values text_state str_start str_total str_end_blk str_end_i
-1 consts 64 str_size
 1024 str_size / value str_per_blk
 create items.pos item_total cells allot0
 create items.taken item_total cells allot0
@@ -141,9 +141,9 @@ free_space value #pos
 : kitten?  ( pos -- f )  0 items.pos[] @ = ;
 : delay ( n -- , n=delay iterations ) 
    for $7FFF for random drop next next ;
-: center  ( -- n , middle of screen ) 
-   LINES 2 /    COLS * 
-   COLS 2 / +    COLS - 1 - ;
+\\ : center  ( -- n , middle of screen ) 
+\\   LINES 2 /    COLS * 
+\\   COLS 2 / +    COLS - 1 - ;
 : kitten_init  ( generate kitten ) 
    item_place 0 items.pos[] !
    0 items.str[] win_str copy_str ;
@@ -161,7 +161,7 @@ free_space value #pos
       dup item_place swap items.pos[] !
       dup pick_str!
    1+ next drop ;
-: title_input ( -- ) key 'q' = if quit then drop ;
+: title_input ( -- ) key 'q' = if drop quit then drop ;
 : title ( -- , show title screen ) 
    clear 510 xypos! title_str emitln 
    745 xypos! title_str2 emitln
@@ -174,7 +174,9 @@ free_space value #pos
    title clear border random_init 
    init_done not if mem_init then item_init #draw
    1 to init_done ;
-: reunion ( -- ) 0 items.str[] sayln 2 delay init ;
+: reunion_anim  ( -- ) ;
+: reunion  ( -- ) 
+   reunion_anim 0 items.str[] sayln delay_count delay init ;
 : move  ( n -- , offset #pos by n and update screen )
    #offset dup wall? if
          drop else
@@ -187,7 +189,7 @@ free_space value #pos
 3 consts COLS down -1 left 1 right
 COLS negate value up
 : input  ( -- ) 
-   key dup 'q' = if quit
+   key dup 'q' = if drop quit
    then dup 'w' = if up move
    else dup 'k' = if up move
    else dup 'a' = if left move
