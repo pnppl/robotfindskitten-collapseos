@@ -55,7 +55,7 @@ create empty_str str_size allot0
 : random_init  ( -- )  8 for random drop next ;
 : rand  ( floor ceil -- n , floor <= n < ceil )  
    over -  random swap mod  + ;
-: coin  ( -- n , 0 or 1 )  random 15 rshift ;
+\\ : coin  ( -- n , 0 or 1 )  random 15 rshift ;
 : []  ( n a -- 'a[n] )  swap cells + ;
 : =[]  ( val n a -- f , f=1 if a[n]=val ) 
    [] @ = if 1 else 0 then ;
@@ -86,6 +86,16 @@ create empty_str str_size allot0
       swap 1+ swap 2dup        \\ blk+ chk blk+ chk
    0>= until                   \\ blk+ chk blk+
    to str_end_blk  to str_end_i    drop ;
+: copy_bytes  ( a2 a1 u -- , copy u bytes from a1 to a2 )
+   for c@+ rot c!+ swap next 2drop ;
+: copy_str  ( a2 a1 -- , copy str from a1 to a2 )
+   str_size copy_bytes ;
+: quit  ( -- , cleanup arrays for repeat init and abort )
+   0 item_total for
+      dup 0 swap items.pos[] !
+      dup 0 swap items.taken[] !
+      dup items.str[] empty_str copy_str
+   1+ next drop clear abort ;
 : str_taken?  ( str# -- f )
    0 item_total for
       2dup items.taken =[] if 
@@ -134,10 +144,6 @@ free_space value #pos
 : center  ( -- n , middle of screen ) 
    LINES 2 /    COLS * 
    COLS 2 / +    COLS - 1 - ;
-: copy_bytes  ( a2 a1 u -- , copy u bytes from a1 to a2 )
-   for c@+ rot c!+ swap next 2drop ;
-: copy_str  ( a2 a1 -- , copy str from a1 to a2 )
-   str_size copy_bytes ;
 : kitten_init  ( generate kitten ) 
    item_place 0 items.pos[] !
    0 items.str[] win_str copy_str ;
@@ -155,25 +161,18 @@ free_space value #pos
       dup item_place swap items.pos[] !
       dup pick_str!
    1+ next drop ;
+: title_input ( -- ) key 'q' = if quit then drop ;
 : title ( -- , show title screen ) 
    clear 510 xypos! title_str emitln 
    745 xypos! title_str2 emitln
    980 xypos! controls_str emitln
-   525 xypos!   key drop ;
+   525 xypos!   title_input ;
 0 value init_done
-: empty_str!  ( a -- , replace string at a with 0s )
-   str_size for 0 swap c!+ next drop ;
-: de_init  ( -- , clear out arrays for repeat init )
-   0 item_total for
-      dup 0 swap items.pos[] !
-      dup 0 swap items.taken[] !
-      dup items.str[] empty_str!
-   1+ next drop ;
 : mem_init  ( -- , init strings stored in blocks after rfk )  
    init_done not if  blk> 1+ to str_start  str_enum  then ;
 : init  ( -- ) 
    title clear border random_init 
-   init_done if de_init then mem_init item_init #draw
+   init_done not if mem_init then item_init #draw
    1 to init_done ;
 : reunion ( -- ) 0 items.str[] sayln 2 delay init ;
 : move  ( n -- , offset #pos by n and update screen )
@@ -188,7 +187,7 @@ free_space value #pos
 3 consts COLS down -1 left 1 right
 COLS negate value up
 : input  ( -- ) 
-   key dup 'q' = if clear abort
+   key dup 'q' = if quit
    then dup 'w' = if up move
    else dup 'k' = if up move
    else dup 'a' = if left move
@@ -199,5 +198,8 @@ COLS negate value up
    else dup 'l' = if right move
    then then then then
    then then then then drop ;
-: rfk  ( main )  
-    init begin input again ;
+: rfk  ( blk? -- , block number where NKIs are stored )  
+( blkno needs to be specified on first run if: )
+( - rfk not invoked immediately after loading )
+( - NKIs not stored in block immediately following rfk )
+    scnt 0 = not if 1- blk@ then init begin input again ;
