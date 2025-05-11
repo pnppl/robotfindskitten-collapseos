@@ -1,10 +1,9 @@
 \\ --------------------- robotfindskitten -----------------------
 alias clrscr clear
 : negate  ( n -- -n , 2's complement )  $FFFF xor 1+ ;
-: 2-  2 - ;
  COLS 1- value x_max
 LINES 1- value y_max
-LINES 2- value y_max-1
+LINES 2 - value y_max-1
 y_max COLS * value bottom-left
 COLS y_max-1 * value grid_len
 grid_len LINES 3 * / value item_total  \\ <-- tweakable 
@@ -55,7 +54,6 @@ create empty_str str_size allot0
 : random_init  ( -- )  8 for random drop next ;
 : rand  ( floor ceil -- n , floor <= n < ceil )  
    over -  random swap mod  + ;
-\\ : coin  ( -- n , 0 or 1 )  random 15 rshift ;
 : []  ( n a -- 'a[n] )  swap cells + ;
 : =[]  ( val n a -- f , f=1 if a[n]=val ) 
    [] @ = if 1 else 0 then ;
