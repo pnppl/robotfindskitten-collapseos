@@ -199,7 +199,7 @@ COLS negate value up
    then then then then
    then then then then drop ;
 : rfk  ( blk? -- , block number where NKIs are stored )  
-( blkno needs to be specified on first run if: )
-( - rfk not invoked immediately after loading )
-( - NKIs not stored in block immediately following rfk )
+\\ blkno needs to be specified on first run if:
+\\ - rfk not invoked immediately after loading
+\\ - NKIs not stored in block immediately following rfk
     scnt 0 = not if 1- blk@ then init begin input again ;
